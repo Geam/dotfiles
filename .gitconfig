@@ -1,0 +1,19 @@
+[core]
+	excludesfile = ~/.gitignore_global
+	editor = vim
+[user]
+	name = Marc DELAGE
+[push]
+	default = simple
+[tig]
+    tab-size = 4
+[init]
+	templatedir = /home/bob/.git-templates
+	defaultBranch = master
+#
+# vim: filetype=gitconfig tabstop=4 shiftwidth=4 expandtab
+[filter "lfs"]
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
