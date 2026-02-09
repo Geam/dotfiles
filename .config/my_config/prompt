@@ -1,0 +1,45 @@
+git_custom_status() {
+    local branch=`git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'`
+    if [[ -z $branch ]]; then
+        return
+    fi
+    local change=`git status -s | sed -e '/^ [MADCRU]/!d'`
+    if [[ -n $change ]]; then
+        echo "[%{$fg[red]%}$branch%{$reset_color%}]"
+        return
+    fi
+    local remote=`git branch -a | grep remotes/origin/$branch`
+    if [[ -n $remote ]]; then
+        change=`git diff origin/$branch`
+    fi
+    if [[ -n $change ]]
+    then
+        echo "[%{$fg[yellow]%}$branch%{$reset_color%}]"
+    else
+        echo "[%{$fg[green]%}$branch%{$reset_color%}]"
+    fi
+}
+
+function zle-line-init zle-keymap-select {
+    if [[ $? -eq 0 ]]
+    then
+        CSTAT="%{$fg[green]%}"
+    else
+        CSTAT="%{$fg[red]%}"
+    fi
+    if [[ "${KEYMAP}" == "main" ]] || [[ "${KEYMAP}" == "viins" ]]
+    then
+        MOD="%{$fg_bold[green]%}[I]%{$reset_color%}"
+    else
+        MOD="%{$fg_bold[yellow]%}[N]%{$reset_color%}"
+    fi
+    PS1="%n@%m:%{$fg_bold[blue]%}%~%{$reset_color%} $(git_custom_status)
+${MOD} %B${CSTAT}>%b %{$reset_color%}"
+    zle reset-prompt
+}
+
+zle -N zle-line-init
+zle -N zle-keymap-select
+export KEYTIMEOUT=1
+
+# vim: filetype=sh tabstop=4 shiftwidth=4 expandtab

@@ -1,0 +1,54 @@
+# alias for config
+if [[ -e ${HOME}/.myconfig ]]; then
+    alias config="/usr/bin/git --git-dir=${HOME}/.myconfig --work-tree=${HOME}"
+    alias configtig="GIT_DIR=${HOME}/.myconfig GIT_WORK_TREE=${HOME} tig"
+fi
+
+# Definition des alias de compilation
+alias gccf="gcc -Wall -Wextra -Werror"
+alias g++f="g++ -Wall -Wextra -Werror"
+
+# git
+alias ga="git add"
+alias gb="git branch"
+alias gcm="git commit -m"
+alias gco="git checkout"
+alias gpl="git pull"
+alias gps="git push"
+alias gm="git merge"
+alias gu="git add -u"
+alias gcp="git cherry-pick"
+
+# most remote aren't aware of xrvt-unicode
+alias ssh="TERM=xterm-256color ssh"
+
+alias nud="nvm use default"
+
+# Replace ls with eza
+eza $HOME >/dev/null 2>&1
+if [[ $? == 0 ]]; then
+    alias ls=eza
+    alias ll="ls -l --group --git"
+    alias la="ll -a"
+    alias lg="ll --grid"
+    alias lt="ll --tree"
+fi
+
+if [[ -e ${HOME}/.config/ripgrep/rc ]]; then
+    alias ag="RIPGREP_CONFIG_PATH=$HOME/.config/ripgrep/rc rg"
+    alias rg="RIPGREP_CONFIG_PATH=$HOME/.config/ripgrep/rc rg"
+fi
+
+dup() {
+    if [[ -n ${KONSOLE_VERSION} ]]
+    then
+        (konsole &) &>/dev/null
+    else
+        (urxvt &) &>/dev/null
+    fi
+}
+
+alias clear-cache="find node_modules -name .cache -prune -exec rm -rf {} \;"
+
+alias tsnode="node --loader ts-node/esm"
+# vim: filetype=sh tabstop=4 shiftwidth=4 expandtab
